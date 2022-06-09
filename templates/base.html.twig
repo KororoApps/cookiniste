@@ -6,7 +6,16 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="{{ asset('css/navbar.css') }} ">
+            <link rel="stylesheet" href="{{ asset('css/body.css') }} "> 
+            <link rel="stylesheet" href="{{ asset('css/style.css') }} "> 
+            <link rel="stylesheet" href="{{ asset('css/btn.css') }} "> 
+            <link rel="stylesheet" href="{{ asset('css/bg.css') }} "> 
+            <link rel="stylesheet" href="{{ asset('css/text.css') }} "> 
+            <link rel="stylesheet" href="{{ asset('css/img.css') }} ">
+            <link rel="stylesheet" href="{{ asset('css/card.css') }} ">
+            <link rel="stylesheet" href="{{ asset('css/foot-page.css') }} ">
+            <link rel="stylesheet" href="{{ asset('css/roboto/roboto.css') }}">
         {% endblock %}
 
         {% block javascripts %}
@@ -14,6 +23,11 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% include "shared/_navbar.html.twig" %}
+        <div class="container">
+            {% block body %}{% endblock %}
+        
+        </div>
+        {% include "shared/_foot.html.twig" %}
     </body>
 </html>

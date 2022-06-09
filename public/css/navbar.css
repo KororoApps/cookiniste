@@ -1,0 +1,23 @@
+.navbar {
+    background-color: #9bd4ce;
+    border: 3px solid #383838;
+    margin-bottom: 5px;
+    height: 50px;
+  }
+
+.navbar-items {
+    font-size: 14px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 1.5rem;
+    height: 100%;
+}
+
+.navbar-items a  {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    
+}

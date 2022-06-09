@@ -1,0 +1,32 @@
+<hr>
+    <div class="foot-card-body">
+        <div class="foot-card bg-info text-white">
+            
+            <div class="assurances">
+                {% include "shared/_assurance.html.twig" with {
+                    'lien': '#',
+                    'color': 'primary',
+                    'text': 'A PROPOS',
+                } %}
+                {% include "shared/_assurance.html.twig" with {
+                    'lien': '#',
+                    'color': 'success',
+                    'text': 'BESOIN D\'AIDE',
+                } %}
+                {% include "shared/_assurance.html.twig" with {
+                    'lien': '#',
+                    'color': 'warning',
+                    'text': 'CONTACT',
+                } %}
+            </div>
+
+            <div class="container-foot-page">
+                <a href="#" class="btn btn-info">Mentions Légales</a>  
+                <a href="#" class="btn btn-info">Politique de confidentialité</a>
+                <a href="#" class="btn btn-info">Remerciements</a>
+                <a href="#" class="btn btn-info">Déclaration relative aux cookies</a>
+            </div>
+
+            <p>@cookiniste. Tout droits réservés. Toutes les marques commerciales et marques déposées sont la propriétés de leur propriétaires respectifs.</p>
+
+        </div>
