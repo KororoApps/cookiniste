@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Livre : {{ book.title }}
+{% endblock %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('homepage') }}" class="breadcrumb-item">Accueil</a>
+        </li>
+        <li>
+            <a href="{{ path('book_show', {'bookId': book.id, 'bookSlug': book.slug}) }}" class="breadcrumb-item">{{ book.title }}</a>
+            
+        </li>
+
+    
+    </ol>
+
+    <h1>Livre : {{ book.title }}</h1>
+    <p>Auteur : {{book.author }}</p>
+    <p>Editeur : {{ book.editor }}</p>
+    <p>ISBN : {{ book.isbn }}</p>
+    <p>ISSN : {{ book.issn }}</p>
+
+    
+    <div class="card-last-elts">    
+        {% for recipe in book.recipes %}    
+                <div class="card-last-elt">      
+                <img src="{{ recipe.picture }}" class="img-fluid" alt="Photo du plat">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ recipe.title }}</h4>
+                        <h4 class="card-title">page {{ recipe.page }}</h4>
+                        <a href="#" class="btn btn-primary">Détails</a>
+                        <a href="#" class="btn btn-success">Ajouter</a>
+                    </div>
+                </div>
+            
+        {% endfor %}
+    </div>
+{% endblock %}

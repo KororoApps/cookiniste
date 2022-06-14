@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Page de {{ recipe.title }}
+{% endblock %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('homepage') }}" class="breadcrumb-item">Accueil</a>
+        </li>
+        <li>
+            <a href="{{ path('book_show', {'bookId': recipe.book.id, 'bookSlug': recipe.book.slug }) }}" class="breadcrumb-item">{{ recipe.book.title }}</a>
+        </li>
+        <li>
+            <a href="{{ path('recipe_show', {'bookId': recipe.book.id, 'bookSlug': recipe.book.slug, 'recipeSlug': recipe.slug, 'recipeId': recipe.id}) }}" class="breadcrumb-item">{{ recipe.title }}</a>
+        </li>
+    
+    </ol>
+
+    <h1>{{ recipe.title }}</h1> 
+    <h3>Page {{ recipe.page }} de {{ recipe.book.title }}</h3>
+    <img src="{{ recipe.picture }}" class="img-fluid" alt="Photo du plat">
+{% endblock %}

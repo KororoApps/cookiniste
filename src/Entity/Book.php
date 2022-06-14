@@ -28,10 +28,10 @@ class Book
     private $editor;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $ISBN;
+    private $isbn;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $ISSN;
+    private $issn;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $slug;
@@ -97,26 +97,26 @@ class Book
         return $this;
     }
 
-    public function getISBN(): ?int
+    public function getIsbn(): ?int
     {
-        return $this->ISBN;
+        return $this->isbn;
     }
 
-    public function setISBN(int $ISBN): self
+    public function setIsbn(int $isbn): self
     {
-        $this->ISBN = $ISBN;
+        $this->isbn = $isbn;
 
         return $this;
     }
 
-    public function getISSN(): ?int
+    public function getIssn(): ?int
     {
-        return $this->ISSN;
+        return $this->issn;
     }
 
-    public function setISSN(?int $ISSN): self
+    public function setIssn(?int $issn): self
     {
-        $this->ISSN = $ISSN;
+        $this->issn = $issn;
 
         return $this;
     }
