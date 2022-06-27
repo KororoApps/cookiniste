@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RecipeController extends AbstractController
@@ -45,25 +46,47 @@ class RecipeController extends AbstractController
     /**
      * @Route("/admin/livre/{bookId}-{bookSlug}/recette/{recipeId}-{recipeSlug}/modification", name="recipe_edit")
      */
-    public function edit ($bookId, $recipeSlug, $bookSlug, RecipeRepository $recipeRepository, EntityManagerInterface $em, Request $request, SluggerInterface $slugger) {
-
-        $recipe = $recipeRepository->find($recipeSlug);
+    public function edit (BookRepository $bookRepository, $bookId, $recipeId, RecipeRepository $recipeRepository, 
+    EntityManagerInterface $em, Request $request, SluggerInterface $slugger) {
+        
+        $book = $bookRepository->find($bookId);
+        $recipe = $recipeRepository->find($recipeId);
 
         $form = $this->createForm(RecipeType::class, $recipe);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
             $recipe->setSlug(strtolower($slugger->slug($recipe->getTitle())));
+
+            $picture = $form->get('picture')->getData();       
+
+            if($picture === null) {
+                $recipe->setPicture($recipe->getPicture());;
+            } else {            
+                $newPictureName = md5(uniqid()).'.'.$picture->guessExtension();    
+                $directory = $this->getParameter('upload_pictures_directory');   
+                $picture->move($directory, $newPictureName);                      
+                $recipe->setPicture($newPictureName);
+
+            }             
+
+
             $em->flush();
             
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('book_show', [
+                'bookId' => $book->getId(),
+                'bookSlug' => $book->getSlug(),
+                'recipeId' => $recipe->getId(),
+                'recipeSlug' => $recipe->getSlug()
+            ]);
         }
 
         $formView = $form->createView();
 
         return $this->render('recipe/editRecipe.html.twig', [
-            'formView' => $formView
+            'formView' => $formView,
+            'recipe' => $recipe
         ]);
 }
 
@@ -73,6 +96,7 @@ class RecipeController extends AbstractController
      */
     public function create ($bookId, BookRepository $bookRepository, RecipeRepository $recipeRepository, Request $request, EntityManagerInterface $em, SluggerInterface $slugger) {
 
+        
         $book = $bookRepository->find($bookId);
         $recipe = new Recipe;
 
@@ -80,14 +104,32 @@ class RecipeController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
             $recipe->setSlug(strtolower($slugger->slug($recipe->getTitle())));
             $recipe->setBook($book);
 
+            $picture = $form->get('picture')->getData();
+
+            if($picture === null) {
+                $pictureName = "nopicture.jpg";
+                $noPicture = $pictureName;
+                $recipe->setPicture($noPicture);;
+            } else {
+            
+                $newPictureName = md5(uniqid()).'.'.$picture->guessExtension();    
+                $directory = $this->getParameter('upload_pictures_directory');   
+                $picture->move($directory, $newPictureName);                      
+                $recipe->setPicture($newPictureName);
+
+            }       
+
             $em->persist($recipe);
             $em->flush();
-
-            return $this->redirectToRoute('homepage');
+            
+            return $this->redirectToRoute('book_show', [
+                'bookId' => $book->getId(),
+                'bookSlug' => $book->getSlug()
+            ]);
         }
 
         $formView = $form->createView();

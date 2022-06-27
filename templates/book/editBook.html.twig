@@ -9,6 +9,8 @@
 {% block body %}
     <h1>Editer le livre {{ book.title }}</h1>
 
+    <img src="{{asset('covers/')}}{{book.cover}}" class="img-fluid" alt="Couverture du livre">
+
     {{ form_start(formView) }}
     {{ form_errors(formView) }}
     {{ form_row(formView.cover) }}
@@ -19,7 +21,7 @@
     {{ form_row(formView.issn) }}
 
     <button type="submit" class="btn btn-primary">
-        Créer le livre
+        Modifier le livre
     </button>
 
     {{ form_end(formView) }}

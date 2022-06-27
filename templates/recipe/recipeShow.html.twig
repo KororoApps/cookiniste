@@ -20,5 +20,5 @@
 
     <h1>{{ recipe.title }}</h1> 
     <h3>Page {{ recipe.page }} de {{ recipe.book.title }}</h3>
-    <img src="{{ recipe.picture }}" class="img-fluid" alt="Photo du plat">
+    <img src="{{asset('pictures/')}}{{recipe.picture}}" class="img-fluid" alt="Photo de la recette">
 {% endblock %}

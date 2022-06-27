@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RecipeRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
@@ -13,12 +14,19 @@ class Recipe
     #[ORM\Column(type: 'integer')]
     private $id;
 
+
     #[ORM\Column(type: 'text', nullable: true)]
     private $picture;
 
+    /**
+     * @Assert\NotBlank(message="Le nom de la recette est obligatoire.")
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
+    /**
+     * @Assert\NotBlank(message="Le numéro de la page où se trouve la recette est obligatoire.")
+     */
     #[ORM\Column(type: 'integer')]
     private $page;
 
@@ -45,12 +53,13 @@ class Recipe
         return $this;
     }
 
+    
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -62,7 +71,7 @@ class Recipe
         return $this->page;
     }
 
-    public function setPage(int $page): self
+    public function setPage(?int $page): self
     {
         $this->page = $page;
 

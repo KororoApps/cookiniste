@@ -8,8 +8,8 @@
     <h1>Derniers livres ajoutés</h1>    
     <div class="card-last-elts">
         {% for book in books %}
-            <div class="card-last-elt">
-                <img src="{{ book.cover}}" class="img-fluid" alt="Couverture du livre">
+            <div class="card-last-elt-book">
+                <img src="{{asset('covers/')}}{{book.cover}}" class="img-fluid" alt="Couverture du livre">
                 <div class="card-body">
                     <h4 class="card-title">{{ book.title }}</h4>
                     <p class="card-text">{{ book.author }} - {{ book.editor }}</p>
@@ -18,7 +18,7 @@
                     {% endfor %}
                      
                     <a href="{{ path('book_show', {'bookId': book.id, 'bookSlug': book.slug}) }}" class="btn btn-primary">Détails</a>
-                    <a href="#" class="btn btn-success">Ajouter</a>
+                    <a href="{{ path('book_edit', {'bookId': book.id, 'bookSlug': book.slug }) }}" class="btn btn-success">Modifier</a>
                 </div>
             </div>
         {% endfor %}
@@ -27,8 +27,8 @@
     <h1>Qu'allons nous manger cette semaine ?</h1>    
     <div class="card-last-elts">
         {% for recipe in recipes %}
-            <div class="card-last-elt">
-                <img src="{{ recipe.picture }}" class="img-fluid" alt="Photo du plat">
+            <div class="card-last-elt-recipe">
+                <img src="{{asset('pictures/')}}{{recipe.picture}}" class="img-fluid" alt="Photo de la recette">
                 <div class="card-body">
                     <h4 class="card-title">{{ recipe.title }}</h4>
                     <a href="{{ path('recipe_show', {'bookId' : recipe.book.id,'bookSlug': recipe.book.slug, 'recipeId': recipe.id, 'recipeSlug': recipe.slug}) }}" class="btn btn-primary">Détails</a>

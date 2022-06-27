@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BookController extends AbstractController
 {
@@ -45,36 +46,73 @@ class BookController extends AbstractController
 
     }
 
+    /**
+     * @Route("/livres",name="book_list")
+     */
+    public function list(BookRepository $bookRepository, RecipeRepository $recipeRepository): Response {
 
-/**
- * @Route("/admin/livre/{bookId}-{bookSlug}/modification", name="book_edit")
- */
-public function edit(SluggerInterface $slugger, $bookId, BookRepository $bookRepository, Request $request, 
-EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, RecipeRepository $recipeRepository) {
+        $books = $bookRepository->findAll();
 
-    
-    $book = $bookRepository->find($bookId);
+        $recipes = $recipeRepository->findBy([], [], 4);
 
-    $form = $this->createForm(BookType::class, $book);
-
-    $form->handleRequest($request);
-
-    if($form->isSubmitted()) {
-        $book->setSlug(strtolower($slugger->slug($book->getTitle())));
-        $em->flush();
-        
-        return $this->redirectToRoute('book', [
-            'bookId' => $book->getId()
+        $recipesByBookId = [];
+        foreach ($books as $book) {
+            $recipesByBookId[$book->getId()] = $recipeRepository->findBy(['book' => $book->getId()], [], 5);
+        }
+        return $this->render('book/bookList.html.twig', [
+            'books' => $books,
+            'recipes' => $recipes,
+            'recipesByBookId' => $recipesByBookId
         ]);
-    
     }
 
-    $formView = $form->createView();
 
-    return $this->render('book/editBook.html.twig', [
-        'book' => $book,
-        'formView' => $formView
-    ]);
+
+    /**
+     * @Route("/admin/livre/{bookId}-{bookSlug}/modification", name="book_edit")
+     */
+    public function edit(SluggerInterface $slugger, $bookId, BookRepository $bookRepository, Request $request, 
+    EntityManagerInterface $em) {
+
+        
+
+        
+        $book = $bookRepository->find($bookId);
+
+        $form = $this->createForm(BookType::class, $book);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $book->setSlug(strtolower($slugger->slug($book->getTitle())));
+
+            $cover = $form->get('cover')->getData();
+
+            if($cover === null) {
+                $book->setCover($book->getCover());;
+            } else {
+                $newCoverName = md5(uniqid()).'.'.$cover->guessExtension();
+                $directory = $this->getParameter('upload_covers_directory');           
+                $cover->move($directory, $newCoverName);    
+                $book->setCover($newCoverName);         
+            }         
+
+
+            $em->flush();
+            
+            return $this->redirectToRoute('book_show', [
+                'bookId' => $book->getId(),
+                'bookSlug' => $book->getSlug()
+            ]);
+        
+        }
+
+        $formView = $form->createView();
+
+        return $this->render('book/editBook.html.twig', [
+            'book' => $book,
+            'formView' => $formView
+        ]);
 
 
 }
@@ -84,7 +122,8 @@ EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, RecipeRepositor
 /**
  * @Route("admin/livre/creation", name="book_create") 
  */    
-public function create(FormFactoryInterface $factory, Request $request, SluggerInterface $slugger, EntityManagerInterface $em) {
+public function create(FormFactoryInterface $factory, Request $request, SluggerInterface $slugger, 
+EntityManagerInterface $em, ValidatorInterface $validator) {
 
     
     $book = new Book;
@@ -92,16 +131,31 @@ public function create(FormFactoryInterface $factory, Request $request, SluggerI
 
     $form->handleRequest($request);
 
-    if($form->isSubmitted()) {
+    if($form->isSubmitted() && $form->isValid()) {
         $book->setSlug(strtolower($slugger->slug($book->getTitle())));
+
+        $cover = $form->get('cover')->getData();
+
+        if($cover === null) {
+            $coverName = "nocover.jpg";
+            $noCover= $coverName;
+            $book->setCover($noCover);;
+        } else {
+            $newCoverName = md5(uniqid()).'.'.$cover->guessExtension();
+            $directory = $this->getParameter('upload_covers_directory');           
+            $cover->move($directory, $newCoverName);    
+            $book->setCover($newCoverName);         
+        }             
 
         $em->persist($book);
         $em->flush();
-        
-        return $this->redirectToRoute('recipe_create', [
+
+        return $this->redirectToRoute('book_show', [
             'bookId' => $book->getId(),
-            'bookSlug' => $book->getSlug(),
+            'bookSlug' => $book->getSlug()
         ]);
+        
+
     }
     $formView = $form->createView();
 

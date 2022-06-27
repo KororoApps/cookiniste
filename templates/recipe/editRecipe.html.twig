@@ -3,20 +3,22 @@
 {% form_theme formView _self %}
 
 {% block title %}
-    Modifier une recette
+    Modifier la recette {{ recipe.title }}
 {% endblock %}
 
 {% block body %}
-    <h1>Modifier une recette</h1>
+    <h1>Modifier la recette {{ recipe.title }}</h1>
 
-     {{ form_start(formView) }}
+    <img src="{{asset('pictures/')}}{{recipe.picture}}" class="img-fluid" alt="Photo de la recette">
+
+    {{ form_start(formView) }}
     {{ form_errors(formView) }}
     {{ form_row(formView.picture) }}
     {{ form_row(formView.title) }}
     {{ form_row(formView.page) }}
 
     <button type="submit" class="btn btn-primary">
-        Créer une recette
+        Modifier la recette
     </button>
 
     {{ form_end(formView) }}

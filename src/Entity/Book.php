@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\BookRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\BookRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -15,22 +17,32 @@ class Book
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    /**
+    *@Assert\NotBlank(message="La couverture du livre est obligatoire.")
+    *
+    */
     #[ORM\Column(type: 'text', nullable: true)]
     private $cover;
 
+    /**
+     * @Assert\NotBlank(message="Le nom du livre est obligatoire.")
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $author;
 
+    /**
+     * @Assert\NotBlank(message="Le nom de l'éditeur du livre est obligatoire.")
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $editor;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $isbn;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $issn;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -66,7 +78,7 @@ class Book
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -78,7 +90,7 @@ class Book
         return $this->author;
     }
 
-    public function setAuthor(string $author): self
+    public function setAuthor(?string $author): self
     {
         $this->author = $author;
 
@@ -90,26 +102,26 @@ class Book
         return $this->editor;
     }
 
-    public function setEditor(string $editor): self
+    public function setEditor(?string $editor): self
     {
         $this->editor = $editor;
 
         return $this;
     }
 
-    public function getIsbn(): ?int
+    public function getIsbn(): ?string
     {
         return $this->isbn;
     }
 
-    public function setIsbn(int $isbn): self
+    public function setIsbn(?int $isbn): self
     {
         $this->isbn = $isbn;
 
         return $this;
     }
 
-    public function getIssn(): ?int
+    public function getIssn(): ?string
     {
         return $this->issn;
     }

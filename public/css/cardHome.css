@@ -3,11 +3,30 @@
     justify-content: space-between;
     align-items: stretch;
     gap: 1.5rem;
+    flex-wrap: nowrap;
 }
 
-.card-last-elt {
+.card-last-elts-bookList {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.card-last-elt-book {
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 0.25rem;
+    width: 300px;
+
+}
+
+.card-last-elt-recipe {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    width: 300px;
+    height: 200px
+
 }
 
 .card {
@@ -25,9 +44,8 @@
 
 
 .card-body {
-    -ms-flex: 1 1 auto;
     flex: 1 1 auto;
-    padding: 1rem 1rem;
+    padding: 10%;
 }
 
 .card-title {

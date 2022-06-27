@@ -18,25 +18,50 @@
     
     </ol>
 
-    <h1>Livre : {{ book.title }}</h1>
-    <p>Auteur : {{book.author }}</p>
-    <p>Editeur : {{ book.editor }}</p>
-    <p>ISBN : {{ book.isbn }}</p>
-    <p>ISSN : {{ book.issn }}</p>
+    <div class="card-book-title-book-show">
+         <h1>{{ book.title }}</h1>
+    </div>
 
-    
-    <div class="card-last-elts">    
-        {% for recipe in book.recipes %}    
-                <div class="card-last-elt">      
-                <img src="{{ recipe.picture }}" class="img-fluid" alt="Photo du plat">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ recipe.title }}</h4>
-                        <h4 class="card-title">page {{ recipe.page }}</h4>
-                        <a href="#" class="btn btn-primary">Détails</a>
-                        <a href="#" class="btn btn-success">Ajouter</a>
+    <div class="card-book-show">
+
+        <div class="card-one-book-show">            
+            <img src="{{asset('covers/')}}{{book.cover}}" class="cover-fluid" alt="Couverture du livre">
+            <p>Auteur : {{book.author }}</p>
+            <p>Editeur : {{ book.editor }}</p>
+            <p>ISBN : {{ book.isbn }}</p>
+            <p>ISSN : {{ book.issn }}</p>
+            <a href="{{ path('book_edit', {'bookId': book.id, 'bookSlug': book.slug }) }}" class="btn btn-success">Modifier</a>
+        </div>
+
+        
+        
+
+        <div class="card-recipes-book-show">   
+
+            <div class="card-recipe-summary-book-show ">
+                <h3>Sommaire</h3>
+            </div>
+
+            {% for recipe in book.recipes %}    
+                    <div class="card-recipe-book-show">      
+                        <img src="{{asset('pictures/')}}{{recipe.picture}}" class="picture-fluid-book-show" alt="Photo du plat">
+                        <div class="card-recipe-body-book-show">
+                            <h4 class="card-recipe-title-book-show">{{ recipe.title }}</h4>
+                            <h4 class="card-recipe-title-book-show">page {{ recipe.page }}</h4>
+                            <a href="#" class="btn btn-primary-book-show">Détails</a>
+                            <a href="{{ path('recipe_edit', {
+                                'bookId': book.id,
+                                'bookSlug': book.slug,
+                                'recipeId': recipe.id,
+                                'recipeSlug': recipe.slug
+                            }) }}" class="btn btn-primary-book-show">Modifier</a>
+                            
+                        </div>
                     </div>
-                </div>
-            
-        {% endfor %}
+                
+            {% endfor %}
+            <a href="{{ path('recipe_create', {'bookId': book.id,
+                'bookSlug': book.slug}) }}" class="btn btn-success-book-show"><div class="add-recipe-book-show">Ajouter une recette</div></a>
+        </div>
     </div>
 {% endblock %}
