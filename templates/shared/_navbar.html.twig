@@ -1,7 +1,8 @@
 <nav class="navbar">
     <div class="navbar-items">         
             <a href="{{ path('homepage') }}">LOGO</a>
-            <a href="{{ path('book_list') }}">BARRE DE RECHERCHE</a>
+            {{ render(controller('App\\Controller\\SearchController::searchBar')) }}
+            <a href="{{ path('book_list') }}">TOUS LES LIVRES</a>
             <a href="{{ path('book_create') }}">PROPOSER UN LIVRE</a>
             <a href="#">MA BIBLIOTHEQUE</a>
             <a href="#">MES RECETTES FETICHES <3</a>
